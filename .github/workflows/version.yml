@@ -1,0 +1,61 @@
+name: Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Version type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  version:
+    name: Create Version PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump versions
+        run: |
+          pnpm version-packages ${{ github.event.inputs.type }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: bump version to ${{ github.event.inputs.type }}'
+          title: 'chore: version packages (${{ github.event.inputs.type }})'
+          body: |
+            This PR bumps the versions of all packages.
+            
+            After merging, run the Release workflow to publish to npm.
+          branch: version/${{ github.event.inputs.type }}
+          delete-branch: true
