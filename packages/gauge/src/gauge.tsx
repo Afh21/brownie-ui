@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cva, cn } from '@brownie-inc/core';
+import { cva, cn } from 'brownie-ui-core';
 
 /**
  * Gauge variant styles
@@ -380,5 +380,6 @@ Gauge.displayName = 'Gauge';
 
 export { Gauge, gaugeVariants };
 export type { GaugeSegment, GaugeRange };
+
 
 

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cva, cn } from '@brownie-inc/core';
+import { cva, cn } from 'brownie-ui-core';
 
 /**
  * Card variant styles
@@ -253,5 +253,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 Card.displayName = 'Card';
 
 export { Card, cardVariants };
+
 
 

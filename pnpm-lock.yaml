@@ -20,16 +20,16 @@ importers:
 
   apps/docs:
     dependencies:
-      '@brownie-ui/button':
+      brownie-ui-button:
         specifier: workspace:*
         version: link:../../packages/button
-      '@brownie-ui/card':
+      brownie-ui-card:
         specifier: workspace:*
         version: link:../../packages/card
-      '@brownie-ui/core':
+      brownie-ui-core:
         specifier: workspace:*
         version: link:../../packages/core
-      '@brownie-ui/gauge':
+      brownie-ui-gauge:
         specifier: workspace:*
         version: link:../../packages/gauge
       react:
@@ -96,7 +96,7 @@ importers:
 
   packages/button:
     dependencies:
-      '@brownie-ui/core':
+      brownie-ui-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -124,7 +124,7 @@ importers:
 
   packages/card:
     dependencies:
-      '@brownie-ui/core':
+      brownie-ui-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -186,7 +186,7 @@ importers:
 
   packages/gauge:
     dependencies:
-      '@brownie-ui/core':
+      brownie-ui-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:

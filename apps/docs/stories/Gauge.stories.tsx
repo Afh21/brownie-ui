@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Gauge } from '@brownie-inc/gauge';
+import { Gauge } from 'brownie-ui-gauge';
 
 /**
  * Gauge Component - A beautiful animated gauge/credit score indicator
@@ -432,4 +432,5 @@ export const SizeComparison: Story = {
     layout: 'padded',
   },
 };
+
 

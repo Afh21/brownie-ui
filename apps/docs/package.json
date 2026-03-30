@@ -10,15 +10,15 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@brownie-inc/button": "workspace:*",
-    "@brownie-inc/card": "workspace:*",
-    "@brownie-inc/core": "workspace:*",
-    "@brownie-inc/gauge": "workspace:*",
+    "brownie-ui-button": "workspace:*",
+    "brownie-ui-card": "workspace:*",
+    "brownie-ui-core": "workspace:*",
+    "brownie-ui-gauge": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@brownie-inc/tsconfig": "workspace:*",
+    "@brownie-ui/tsconfig": "workspace:*",
     "@storybook/addon-essentials": "^8.4.5",
     "@storybook/addon-interactions": "^8.4.5",
     "@storybook/addon-links": "^8.4.5",
@@ -38,4 +38,5 @@
     "vite": "^6.0.0"
   }
 }
+
 

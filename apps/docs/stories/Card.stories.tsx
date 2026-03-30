@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card } from '@brownie-inc/card';
+import { Card } from 'brownie-ui-card';
 
 /**
  * Card Component - A beautiful card with image overlay, avatar, and action button
@@ -202,4 +202,5 @@ export const ConnectingStates: Story = {
     layout: 'padded',
   },
 };
+
 

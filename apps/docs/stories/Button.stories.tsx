@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@brownie-inc/button';
+import { Button } from 'brownie-ui-button';
 
 /**
  * Button component - A versatile, accessible button with multiple variants
@@ -346,4 +346,5 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+
 

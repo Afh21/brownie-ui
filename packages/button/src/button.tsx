@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cva, cn, type VariantProps } from '@brownie-inc/core';
+import { cva, cn, type VariantProps } from 'brownie-ui-core';
 
 /**
  * Button variants using class-variance-authority
@@ -259,5 +259,6 @@ function LoadingSpinner({ className, size }: LoadingSpinnerProps) {
 }
 
 export { Button, buttonVariants };
+
 
 
