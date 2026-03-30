@@ -1,0 +1,8 @@
+{
+  "extends": "@brownie-ui/tsconfig/react-library.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [".storybook/**/*", "stories/**/*"],
+  "exclude": ["node_modules"]
+}

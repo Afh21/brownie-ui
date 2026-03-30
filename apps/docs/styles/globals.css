@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brownie UI CSS Variables */
+  --brownie-primary-50: #fdf8f6;
+  --brownie-primary-100: #f2e8e5;
+  --brownie-primary-200: #eaddd7;
+  --brownie-primary-300: #e0cec7;
+  --brownie-primary-400: #d2bab0;
+  --brownie-primary-500: #a18072;
+  --brownie-primary-600: #8a6a5c;
+  --brownie-primary-700: #73564a;
+  --brownie-primary-800: #5c4238;
+  --brownie-primary-900: #452f28;
+  --brownie-primary-950: #2d1f1a;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for documentation */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

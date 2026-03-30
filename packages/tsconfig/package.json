@@ -1,0 +1,13 @@
+{
+  "name": "@brownie-ui/tsconfig",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Shared TypeScript configurations for Brownie UI",
+  "main": "index.js",
+  "files": [
+    "*.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

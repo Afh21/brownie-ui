@@ -1,0 +1,44 @@
+{
+  "name": "brownie-ui",
+  "private": true,
+  "version": "0.1.1",
+  "description": "🍫 A beautiful UI component library for shadcn/ui",
+  "author": "Brownie UI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/brownie-ui.git"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "shadcn",
+    "tailwindcss",
+    "typescript",
+    "brownie-ui"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=!docs && changeset publish",
+    "storybook": "turbo run storybook --filter=docs",
+    "build-storybook": "turbo run build-storybook --filter=docs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.3"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
