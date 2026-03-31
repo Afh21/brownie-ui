@@ -231,7 +231,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     return (
       <div
         ref={ref}
-        className={cn(performanceLinearVariants({}), className)}
+        className={cn(performanceLinearVariants({}), 'relative', className)}
         {...props}
       >
         {/* Header with title and label */}
@@ -261,8 +261,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             className="absolute text-xs font-medium text-gray-600 dark:text-gray-400"
             style={{
               left: `${lastSegmentPosition * 100}%`,
+              top: `${barHeight + 8}px`,
               transform: 'translateX(-50%)',
-              marginTop: '4px',
             }}
           >
             {formatValue(value)}
@@ -270,7 +270,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         )}
 
         {/* Scale labels */}
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between" style={{ marginTop: '28px' }}>
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
         </div>
