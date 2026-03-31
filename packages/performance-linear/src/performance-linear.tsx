@@ -64,6 +64,10 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    * Whether to show the value below the last active segment
    */
   showValue?: boolean;
+  /**
+   * Gap between segments in pixels (default: 2)
+   */
+  gap?: number;
 }
 
 /**
@@ -164,13 +168,14 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       formatValue = (v) => v.toString(),
       highlightLast = true,
       showValue = true,
+      gap,
       className,
       ...props
     },
     ref
   ) => {
-    // Gap as percentage for consistency
-    const gapPercent = 0.25;
+    // Gap between segments (default 2px)
+    const gapSize = gap ?? 2;
     
     // Calculate percentage (0-1) - clamped
     const percentage = React.useMemo(() => {
@@ -180,12 +185,14 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     // Find the last active segment index
     const lastActiveIndex = Math.floor(percentage * (segments - 1));
     
-    // Calculate position for value label - matches segment positioning exactly
-    // Total gap space + available space calculation
-    const totalGapSpace = (segments - 1) * gapPercent;
-    const availableSpace = 100 - totalGapSpace;
-    const segmentWidth = availableSpace / segments;
-    // Position: sum of all segments and gaps before + half of current segment
+    // Calculate position for value label
+    // Each segment takes equal width, gaps are in pixels
+    const containerWidth = 100; // percentage
+    const totalGapPixels = (segments - 1) * gapSize;
+    // Convert gap to percentage of container (approximate for positioning)
+    const gapPercent = (gapSize / 400) * 100; // Assuming ~400px container
+    const segmentWidth = (containerWidth - ((segments - 1) * gapPercent)) / segments;
+    // Position: sum of segments and gaps before + half of current segment
     const valuePosition = (lastActiveIndex * segmentWidth) + (lastActiveIndex * gapPercent) + (segmentWidth / 2);
     
     // Generate bar segments

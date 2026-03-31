@@ -18,6 +18,7 @@ declare module 'brownie-ui-performance-linear' {
     formatValue?: (value: number) => string;
     highlightLast?: boolean;
     showValue?: boolean;
+    gap?: number;
   }
 
   export const PerformanceLinear: React.ForwardRefExoticComponent<PerformanceLinearProps & React.RefAttributes<HTMLDivElement>>;
