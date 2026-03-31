@@ -253,52 +253,52 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           </span>
         </div>
 
-        {/* Bar container */}
-        <div
-          className="relative"
-          style={{ height: barHeight }}
-        >
-          {/* Segmented bars - gap as percentage for consistency */}
-          <div className="flex w-full h-full items-center" style={{ gap: '0.25%' }}>
-            {generateSegments()}
+        {/* Bar container with value label */}
+        <div className="relative">
+          {/* Bars */}
+          <div style={{ height: barHeight }}>
+            {/* Segmented bars - gap as percentage for consistency */}
+            <div className="flex w-full h-full items-center" style={{ gap: '0.25%' }}>
+              {generateSegments()}
+            </div>
           </div>
+
+          {/* Arrow and value label below last active segment */}
+          {showValue && (
+            <div
+              className="absolute flex flex-col items-center"
+              style={{
+                left: `${valuePosition}%`,
+                top: `${barHeight + 4}px`,
+                transform: 'translateX(-50%)',
+              }}
+            >
+              {/* Down arrow */}
+              <svg 
+                width="12" 
+                height="8" 
+                viewBox="0 0 12 8" 
+                fill="none"
+                className="text-gray-600 dark:text-gray-400"
+              >
+                <path 
+                  d="M1 1.5L6 6.5L11 1.5" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {/* Value number */}
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">
+                {formatValue(value)}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Arrow and value label below last active segment */}
-        {showValue && (
-          <div
-            className="absolute flex flex-col items-center"
-            style={{
-              left: `${valuePosition}%`,
-              top: `${barHeight + 4}px`,
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {/* Down arrow */}
-            <svg 
-              width="12" 
-              height="8" 
-              viewBox="0 0 12 8" 
-              fill="none"
-              className="text-gray-600 dark:text-gray-400"
-            >
-              <path 
-                d="M1 1.5L6 6.5L11 1.5" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-            </svg>
-            {/* Value number */}
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">
-              {formatValue(value)}
-            </span>
-          </div>
-        )}
-
         {/* Scale labels */}
-        <div className="flex justify-between" style={{ marginTop: '32px' }}>
+        <div className="flex justify-between" style={{ marginTop: '28px' }}>
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
         </div>
