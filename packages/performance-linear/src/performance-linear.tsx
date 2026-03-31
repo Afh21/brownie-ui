@@ -177,8 +177,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     // Find the index of the last active segment
     const lastActiveIndex = Math.floor(percentage * (segments - 1));
     
-    // Calculate position for the value label (center of last active segment)
-    const lastSegmentPosition = lastActiveIndex / (segments - 1);
+    // Calculate position for the value label - use percentage directly
+    const valuePosition = percentage * 100;
 
     // Generate bar segments
     const generateSegments = () => {
@@ -260,7 +260,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           <div
             className="absolute text-xs font-medium text-gray-600 dark:text-gray-400"
             style={{
-              left: `${lastSegmentPosition * 100}%`,
+              left: `${valuePosition}%`,
               top: `${barHeight + 8}px`,
               transform: 'translateX(-50%)',
             }}
