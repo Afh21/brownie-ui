@@ -443,8 +443,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           )}
         </div>
 
-        {/* Scale labels - hidden when showSteps is active */}
-        {!showSteps && (
+        {/* Scale labels - hidden when steps are shown */}
+        {!(showSteps || (customSteps && customSteps.length > 0)) && (
           <div 
             className="flex justify-between" 
             style={{ marginTop: '4px' }}
