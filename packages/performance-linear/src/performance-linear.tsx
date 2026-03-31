@@ -452,7 +452,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   bottom: '12px',
                   transform: 'translateX(-50%)',
                   color: sectionColor,
-                  paddingLeft: '4px',
+                  paddingLeft: '8px',
                 }}
               >
                 {section.label || formatValue(section.start)}
@@ -466,7 +466,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   bottom: '12px',
                   transform: 'translateX(50%)',
                   color: sectionColor,
-                  paddingRight: '4px',
+                  paddingRight: '8px',
                 }}
               >
                 {formatValue(section.end)}
