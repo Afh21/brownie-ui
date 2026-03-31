@@ -392,7 +392,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return steps;
     };
 
-    // Generate sections with bracket lines and custom content
+    // Generate sections with bracket lines pointing UP and custom content
     const generateSections = () => {
       if (!sections || sections.length === 0) return null;
       
@@ -405,38 +405,40 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         const endPosition = endPercent * 100;
         const width = endPosition - startPosition;
         const sectionColor = section.color || '#6b7280'; // gray-500 default
+        const isLast = index === sections.length - 1;
         
         return (
           <div
             key={index}
-            className="absolute"
+            className="absolute flex flex-col items-center"
             style={{
               left: `${startPosition}%`,
               width: `${width}%`,
-              top: `${barHeight + 4}px`,
+              top: `${barHeight + 8}px`,
+              paddingRight: isLast ? '0' : '8px', // Gap between sections
             }}
           >
-            {/* Bracket line container */}
-            <div className="relative w-full" style={{ height: '20px' }}>
-              {/* Left vertical line */}
+            {/* Bracket container - lines pointing UP */}
+            <div className="relative w-full" style={{ height: '16px' }}>
+              {/* Left vertical line (going UP) */}
               <div 
-                className="absolute left-0 top-0 w-px"
+                className="absolute left-0 bottom-0 w-px"
                 style={{ 
-                  height: '12px', 
+                  height: '10px', 
                   backgroundColor: sectionColor 
                 }}
               />
-              {/* Right vertical line */}
+              {/* Right vertical line (going UP) - only if last section or different from next */}
               <div 
-                className="absolute right-0 top-0 w-px"
+                className="absolute right-0 bottom-0 w-px"
                 style={{ 
-                  height: '12px', 
+                  height: '10px', 
                   backgroundColor: sectionColor 
                 }}
               />
-              {/* Horizontal line */}
+              {/* Horizontal line at bottom */}
               <div 
-                className="absolute left-0 top-0 w-full h-px"
+                className="absolute left-0 bottom-0 w-full h-px"
                 style={{ backgroundColor: sectionColor }}
               />
               
@@ -445,31 +447,24 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                 className="absolute text-[10px] font-medium"
                 style={{ 
                   left: '0', 
-                  top: '14px',
+                  bottom: '12px',
                   transform: 'translateX(-50%)',
                   color: sectionColor 
                 }}
               >
                 {section.label || formatValue(section.start)}
               </span>
-              
-              {/* End label */}
-              <span 
-                className="absolute text-[10px] font-medium"
-                style={{ 
-                  right: '0', 
-                  top: '14px',
-                  transform: 'translateX(50%)',
-                  color: sectionColor 
-                }}
-              >
-                {formatValue(section.end)}
-              </span>
             </div>
             
-            {/* Custom content area */}
+            {/* Custom content area - centered */}
             {section.content && (
-              <div className="mt-4 px-1">
+              <div 
+                className="mt-2 w-full text-center"
+                style={{ 
+                  borderRight: isLast ? 'none' : `1px solid ${sectionColor}20`,
+                  padding: '0 4px'
+                }}
+              >
                 {section.content}
               </div>
             )}
