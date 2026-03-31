@@ -256,16 +256,21 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             className="absolute flex flex-col items-center"
             style={{
               left: `${stepPosition}%`,
-              top: `${barHeight + 4}px`,
+              top: `${barHeight - 2}px`,
               transform: 'translateX(-50%)',
             }}
           >
+            {/* Line pointing up to the bar */}
+            <div 
+              className="w-px bg-gray-400 dark:bg-gray-500"
+              style={{ height: '6px' }}
+            />
             {/* Dot marker */}
             <div 
-              className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
+              className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 -mt-0.5"
             />
             {/* Step number */}
-            <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
               {formatValue(stepValue)}
             </span>
           </div>
@@ -356,7 +361,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         {/* Scale labels */}
         <div 
           className="flex justify-between" 
-          style={{ marginTop: showSteps ? '32px' : '28px' }}
+          style={{ marginTop: showSteps ? '24px' : '28px' }}
         >
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
