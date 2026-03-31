@@ -324,36 +324,31 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             </div>
           )}
 
-          {/* Arrow and value label below last active segment */}
+          {/* Black tooltip with value */}
           {showValue && (
             <div
               className="absolute flex flex-col items-center"
               style={{
                 left: `${valuePosition}%`,
-                top: `${barHeight + 4}px`,
+                top: `${barHeight + 6}px`,
                 transform: 'translateX(-50%)',
               }}
             >
-              {/* Down arrow */}
-              <svg 
-                width="12" 
-                height="8" 
-                viewBox="0 0 12 8" 
-                fill="none"
-                className="text-gray-600 dark:text-gray-400"
+              {/* Up triangle pointing to bar */}
+              <div 
+                className="w-0 h-0"
+                style={{
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderBottom: '6px solid #1f2937', // gray-800
+                }}
+              />
+              {/* Black box with value */}
+              <div 
+                className="bg-gray-800 dark:bg-gray-900 text-white text-xs font-medium px-2 py-1 rounded"
               >
-                <path 
-                  d="M1 1.5L6 6.5L11 1.5" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {/* Value number */}
-              <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">
                 {formatValue(value)}
-              </span>
+              </div>
             </div>
           )}
         </div>
