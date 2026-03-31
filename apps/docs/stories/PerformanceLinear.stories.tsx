@@ -528,3 +528,55 @@ export const StepsEvery20: Story = {
     },
   },
 };
+
+/**
+ * Custom steps - non-uniform ranges
+ */
+export const CustomSteps: Story = {
+  args: {
+    value: 25,
+    min: 0,
+    max: 100,
+    title: 'Rangos personalizados',
+    segments: 40,
+    customSteps: [
+      { start: 0, end: 5 },
+      { start: 5, end: 12 },
+      { start: 12, end: 37 },
+      { start: 37, end: 100 },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Custom step ranges: 0-5, 5-12, 12-37, 37-100 with markers at each boundary',
+      },
+    },
+  },
+};
+
+/**
+ * Custom steps with labels
+ */
+export const CustomStepsWithLabels: Story = {
+  args: {
+    value: 60,
+    min: 0,
+    max: 100,
+    title: 'Niveles de riesgo',
+    segments: 40,
+    customSteps: [
+      { start: 0, end: 20, label: 'Bajo' },
+      { start: 20, end: 50, label: 'Medio' },
+      { start: 50, end: 80, label: 'Alto' },
+      { start: 80, end: 100, label: 'Crítico' },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Custom steps with custom labels for each range boundary',
+      },
+    },
+  },
+};

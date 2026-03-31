@@ -17,6 +17,18 @@ interface ColorStop {
 }
 
 /**
+ * Custom step configuration
+ */
+interface CustomStep {
+  /** Start value of the step range */
+  start: number;
+  /** End value of the step range */
+  end: number;
+  /** Optional label for this step (defaults to the value) */
+  label?: string;
+}
+
+/**
  * Props for the PerformanceLinear component
  */
 export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -72,6 +84,11 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    * Step interval for showing step markers (e.g., 10 for every 10 units)
    */
   showSteps?: number;
+  /**
+   * Custom step ranges for non-uniform steps
+   * Example: [{ start: 0, end: 5 }, { start: 5, end: 12 }, { start: 12, end: 37 }]
+   */
+  customSteps?: CustomStep[];
 }
 
 /**
@@ -174,6 +191,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       showValue = true,
       gap,
       showSteps,
+      customSteps,
       className,
       ...props
     },
@@ -237,6 +255,78 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
 
     // Generate step markers
     const generateSteps = () => {
+      // Handle custom steps
+      if (customSteps && customSteps.length > 0) {
+        const steps = [];
+        const range = max - min;
+        
+        for (const step of customSteps) {
+          const stepPercent = (step.start - min) / range;
+          const stepPosition = stepPercent * 100;
+          const displayLabel = step.label ?? formatValue(step.start);
+          
+          steps.push(
+            <div
+              key={step.start}
+              className="absolute flex flex-col items-center"
+              style={{
+                left: `${stepPosition}%`,
+                top: '2px',
+                transform: 'translateX(-50%)',
+              }}
+            >
+              {/* Line pointing up to the bar */}
+              <div 
+                className="w-px bg-gray-400 dark:bg-gray-500"
+                style={{ height: '6px' }}
+              />
+              {/* Dot marker */}
+              <div 
+                className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 -mt-0.5"
+              />
+              {/* Step label */}
+              <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                {displayLabel}
+              </span>
+            </div>
+          );
+        }
+        
+        // Add end marker for the last step
+        const lastStep = customSteps[customSteps.length - 1];
+        const endPercent = (lastStep.end - min) / range;
+        const endPosition = endPercent * 100;
+        
+        steps.push(
+          <div
+            key={`end-${lastStep.end}`}
+            className="absolute flex flex-col items-center"
+            style={{
+              left: `${endPosition}%`,
+              top: '2px',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {/* Line pointing up to the bar */}
+            <div 
+              className="w-px bg-gray-400 dark:bg-gray-500"
+              style={{ height: '6px' }}
+            />
+            {/* Dot marker */}
+            <div 
+              className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 -mt-0.5"
+            />
+            {/* Step label */}
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+              {formatValue(lastStep.end)}
+            </span>
+          </div>
+        );
+        
+        return steps;
+      }
+      
+      // Handle uniform steps (showSteps)
       if (!showSteps || showSteps <= 0) return null;
       
       const steps = [];
