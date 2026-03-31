@@ -256,7 +256,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             className="absolute flex flex-col items-center"
             style={{
               left: `${stepPosition}%`,
-              top: `${barHeight - 4}px`,
+              top: `${barHeight - 6}px`,
               transform: 'translateX(-50%)',
             }}
           >
@@ -319,7 +319,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
 
           {/* Step markers */}
           {showSteps && (
-            <div className="relative" style={{ height: '16px' }}>
+            <div className="relative" style={{ height: '12px', marginBottom: '-4px' }}>
               {generateSteps()}
             </div>
           )}
@@ -361,7 +361,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         {/* Scale labels */}
         <div 
           className="flex justify-between" 
-          style={{ marginTop: showSteps ? '8px' : '28px' }}
+          style={{ marginTop: '4px' }}
         >
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
