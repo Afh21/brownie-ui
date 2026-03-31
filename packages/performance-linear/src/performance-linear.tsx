@@ -256,22 +256,41 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           </div>
         </div>
 
-        {/* Value label below last active segment */}
+        {/* Arrow and value label below last active segment */}
         {showValue && (
           <div
-            className="absolute text-xs font-medium text-gray-600 dark:text-gray-400"
+            className="absolute flex flex-col items-center"
             style={{
               left: `${valuePosition}%`,
-              top: `${barHeight + 8}px`,
+              top: `${barHeight + 4}px`,
               transform: 'translateX(-50%)',
             }}
           >
-            {formatValue(value)}
+            {/* Down arrow */}
+            <svg 
+              width="12" 
+              height="8" 
+              viewBox="0 0 12 8" 
+              fill="none"
+              className="text-gray-600 dark:text-gray-400"
+            >
+              <path 
+                d="M1 1.5L6 6.5L11 1.5" 
+                stroke="currentColor" 
+                strokeWidth="1.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+            {/* Value number */}
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">
+              {formatValue(value)}
+            </span>
           </div>
         )}
 
         {/* Scale labels */}
-        <div className="flex justify-between" style={{ marginTop: '28px' }}>
+        <div className="flex justify-between" style={{ marginTop: '32px' }}>
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
         </div>
