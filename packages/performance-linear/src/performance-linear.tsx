@@ -358,14 +358,16 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           )}
         </div>
 
-        {/* Scale labels */}
-        <div 
-          className="flex justify-between" 
-          style={{ marginTop: '4px' }}
-        >
-          <span className="text-xs text-gray-400">{formatValue(min)}</span>
-          <span className="text-xs text-gray-400">{formatValue(max)}</span>
-        </div>
+        {/* Scale labels - hidden when showSteps is active */}
+        {!showSteps && (
+          <div 
+            className="flex justify-between" 
+            style={{ marginTop: '4px' }}
+          >
+            <span className="text-xs text-gray-400">{formatValue(min)}</span>
+            <span className="text-xs text-gray-400">{formatValue(max)}</span>
+          </div>
+        )}
       </div>
     );
   }
