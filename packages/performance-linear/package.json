@@ -1,0 +1,69 @@
+{
+  "name": "brownie-ui-performance-linear",
+  "version": "0.1.3",
+  "description": "A linear segmented performance bar component for Brownie UI",
+  "author": "Brownie UI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/brownie-ui.git",
+    "directory": "packages/performance-linear"
+  },
+  "keywords": [
+    "react",
+    "performance",
+    "linear",
+    "gauge",
+    "fear-greed",
+    "index",
+    "metrics",
+    "ui",
+    "components",
+    "tailwindcss",
+    "brownie-ui"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "dist/**/*",
+    "brownie-ui-performance-linear.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react,brownie-ui-core",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react,brownie-ui-core",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "brownie-ui-core": "0.1.3"
+  },
+  "devDependencies": {
+    "@brownie-ui/tsconfig": "workspace:*",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "eslint": "^9.15.0",
+    "react": "^18.3.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
