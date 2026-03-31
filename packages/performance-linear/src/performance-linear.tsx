@@ -174,16 +174,12 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return Math.max(0, Math.min(1, (value - min) / (max - min)));
     }, [value, min, max]);
 
-    // Find the index of the last active segment
+    // Find the last active segment index
     const lastActiveIndex = Math.floor(percentage * (segments - 1));
     
-    // Calculate position for the value label - center of last active segment
-    // Each segment takes up (100/segments)% width with gaps
-    const segmentWidthPercent = 100 / segments;
-    const gapPercent = 2 / segments; // 2% gap distributed
-    const actualSegmentWidth = segmentWidthPercent - gapPercent;
-    // Position is: (index * segmentWidth) + (half of segment width)
-    const valuePosition = (lastActiveIndex * segmentWidthPercent) + (actualSegmentWidth / 2);
+    // Calculate position for value label - center of last active segment
+    const segmentWidth = 100 / segments;
+    const valuePosition = (lastActiveIndex * segmentWidth) + (segmentWidth / 2) - 1;
 
     // Generate bar segments
     const generateSegments = () => {
