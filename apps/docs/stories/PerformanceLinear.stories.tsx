@@ -644,3 +644,93 @@ export const WithSections: Story = {
     },
   },
 };
+
+/**
+ * Life stages with icons - Age groups
+ */
+export const LifeStages: Story = {
+  args: {
+    value: 45,
+    min: 0,
+    max: 100,
+    title: 'Etapas de Vida',
+    label: 'Adulto Mayor',
+    segments: 50,
+    barHeight: 28,
+    gradient: [
+      { position: 0, color: '#22c55e' },
+      { position: 0.3, color: '#3b82f6' },
+      { position: 0.6, color: '#8b5cf6' },
+      { position: 1, color: '#ef4444' },
+    ],
+    sections: [
+      { 
+        start: 0, 
+        end: 5, 
+        label: '0',
+        color: '#22c55e',
+        content: (
+          <div className="flex flex-col items-center">
+            <span className="text-lg">👶</span>
+            <span className="text-[9px] text-gray-600 font-medium">Niño</span>
+          </div>
+        )
+      },
+      { 
+        start: 9, 
+        end: 18, 
+        label: '9',
+        color: '#3b82f6',
+        content: (
+          <div className="flex flex-col items-center">
+            <span className="text-lg">🧑‍🎓</span>
+            <span className="text-[9px] text-gray-600 font-medium">Adolescente</span>
+          </div>
+        )
+      },
+      { 
+        start: 20, 
+        end: 30, 
+        label: '20',
+        color: '#06b6d4',
+        content: (
+          <div className="flex flex-col items-center">
+            <span className="text-lg">👨‍💼</span>
+            <span className="text-[9px] text-gray-600 font-medium">Adulto</span>
+          </div>
+        )
+      },
+      { 
+        start: 40, 
+        end: 65, 
+        label: '40',
+        color: '#8b5cf6',
+        content: (
+          <div className="flex flex-col items-center">
+            <span className="text-lg">👴</span>
+            <span className="text-[9px] text-gray-600 font-medium">Adulto Mayor</span>
+          </div>
+        )
+      },
+      { 
+        start: 70, 
+        end: 99, 
+        label: '70',
+        color: '#ef4444',
+        content: (
+          <div className="flex flex-col items-center">
+            <span className="text-lg">🧓</span>
+            <span className="text-[9px] text-gray-600 font-medium">Adulto Vegete</span>
+          </div>
+        )
+      },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Life stages represented with icons: Niño (0-5), Adolescente (9-18), Adulto (20-30), Adulto Mayor (40-65), Adulto Vegete (70-99)',
+      },
+    },
+  },
+};
