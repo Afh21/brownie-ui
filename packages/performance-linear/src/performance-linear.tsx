@@ -193,9 +193,6 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     };
 
     const displayLabel = label || getDefaultLabel(percentage);
-    
-    // Calculate indicator position
-    const indicatorLeft = percentage * 100;
 
     return (
       <div
@@ -225,22 +222,12 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             {generateSegments()}
           </div>
 
-          {/* Indicator bar - posicionado exactamente en el porcentaje */}
-          <div
-            className="absolute top-1/2 w-0.5 bg-gray-900 dark:bg-white rounded-full pointer-events-none"
-            style={{
-              height: '130%',
-              left: `${indicatorLeft}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-
           {/* Tooltip */}
           {showTooltip && isHovered && (
             <div
               className="absolute -top-8 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg pointer-events-none whitespace-nowrap z-10"
               style={{
-                left: `${indicatorLeft}%`,
+                left: `${percentage * 100}%`,
                 transform: 'translateX(-50%)',
               }}
             >

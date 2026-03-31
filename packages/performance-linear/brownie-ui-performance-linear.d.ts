@@ -17,7 +17,7 @@ declare module 'brownie-ui-performance-linear' {
     gradient?: ColorStop[];
     animationDuration?: number;
     formatValue?: (value: number) => string;
-    showTooltip?: boolean;
+
   }
 
   export const PerformanceLinear: React.ForwardRefExoticComponent<PerformanceLinearProps & React.RefAttributes<HTMLDivElement>>;
