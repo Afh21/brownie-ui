@@ -407,8 +407,13 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         const sectionColor = section.color || '#6b7280'; // gray-500 default
         const isLast = index === sections.length - 1;
         
-        // Note: We show both start and end lines for all sections
-        // Labels are shown for all boundaries
+        // Check if next section starts where this one ends (contiguous)
+        const nextSection = sections[index + 1];
+        const isContiguous = nextSection && nextSection.start === section.end;
+        
+        // Check if previous section ends where this one starts
+        const prevSection = sections[index - 1];
+        const isContiguousWithPrev = prevSection && prevSection.end === section.start;
         
         return (
           <div
@@ -431,45 +436,53 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   backgroundColor: sectionColor 
                 }}
               />
-              {/* Right vertical line (going UP) */}
-              <div 
-                className="absolute right-0 bottom-0 w-px"
-                style={{ 
-                  height: '10px', 
-                  backgroundColor: sectionColor 
-                }}
-              />
+              {/* Right vertical line (going UP) - hide if contiguous with next */}
+              {!isContiguous && (
+                <div 
+                  className="absolute right-0 bottom-0 w-px"
+                  style={{ 
+                    height: '10px', 
+                    backgroundColor: sectionColor 
+                  }}
+                />
+              )}
               {/* Horizontal line at bottom */}
               <div 
                 className="absolute left-0 bottom-0 w-full h-px"
                 style={{ backgroundColor: sectionColor }}
               />
               
-              {/* Start label */}
-              <span 
-                className="absolute text-[10px] font-medium"
-                style={{ 
-                  left: '0', 
-                  bottom: '12px',
-                  transform: 'translateX(-50%)',
-                  color: sectionColor 
-                }}
-              >
-                {section.label || formatValue(section.start)}
-              </span>
+              {/* Start label - hide if contiguous with previous (already shown as end of prev) */}
+              {!isContiguousWithPrev && (
+                <span 
+                  className="absolute text-[10px] font-medium"
+                  style={{ 
+                    left: '0', 
+                    bottom: '12px',
+                    transform: 'translateX(-50%)',
+                    color: sectionColor,
+                    paddingLeft: '4px',
+                  }}
+                >
+                  {section.label || formatValue(section.start)}
+                </span>
+              )}
               
-              {/* End label */}
-              <span 
-                className="absolute text-[10px] font-medium"
-                style={{ 
-                  right: '0', 
-                  bottom: '12px',
-                  transform: 'translateX(50%)',
-                  color: sectionColor 
-                }}
-              >
-                {formatValue(section.end)}
-              </span>
+              {/* End label - hide if contiguous with next (will be shown as start of next) */}
+              {!isContiguous && (
+                <span 
+                  className="absolute text-[10px] font-medium"
+                  style={{ 
+                    right: '0', 
+                    bottom: '12px',
+                    transform: 'translateX(50%)',
+                    color: sectionColor,
+                    paddingRight: '4px',
+                  }}
+                >
+                  {formatValue(section.end)}
+                </span>
+              )}
             </div>
             
             {/* Custom content area - centered */}
