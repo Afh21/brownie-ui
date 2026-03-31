@@ -68,6 +68,10 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    * Gap between segments in pixels (default: 2)
    */
   gap?: number;
+  /**
+   * Step interval for showing step markers (e.g., 10 for every 10 units)
+   */
+  showSteps?: number;
 }
 
 /**
@@ -169,6 +173,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       highlightLast = true,
       showValue = true,
       gap,
+      showSteps,
       className,
       ...props
     },
@@ -230,6 +235,46 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return segmentArray;
     };
 
+    // Generate step markers
+    const generateSteps = () => {
+      if (!showSteps || showSteps <= 0) return null;
+      
+      const steps = [];
+      const range = max - min;
+      const stepCount = Math.floor(range / showSteps);
+      
+      for (let i = 0; i <= stepCount; i++) {
+        const stepValue = min + (i * showSteps);
+        if (stepValue > max) break;
+        
+        const stepPercent = (stepValue - min) / range;
+        const stepPosition = stepPercent * 100;
+        
+        steps.push(
+          <div
+            key={stepValue}
+            className="absolute flex flex-col items-center"
+            style={{
+              left: `${stepPosition}%`,
+              top: `${barHeight + 4}px`,
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {/* Dot marker */}
+            <div 
+              className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
+            />
+            {/* Step number */}
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
+              {formatValue(stepValue)}
+            </span>
+          </div>
+        );
+      }
+      
+      return steps;
+    };
+
     // Get label based on position if not provided
     const getDefaultLabel = (pos: number): string => {
       if (pos < 0.2) return 'Extreme Fear';
@@ -267,6 +312,13 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             </div>
           </div>
 
+          {/* Step markers */}
+          {showSteps && (
+            <div className="relative" style={{ height: '24px' }}>
+              {generateSteps()}
+            </div>
+          )}
+
           {/* Arrow and value label below last active segment */}
           {showValue && (
             <div
@@ -302,7 +354,10 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         </div>
 
         {/* Scale labels */}
-        <div className="flex justify-between" style={{ marginTop: '28px' }}>
+        <div 
+          className="flex justify-between" 
+          style={{ marginTop: showSteps ? '32px' : '28px' }}
+        >
           <span className="text-xs text-gray-400">{formatValue(min)}</span>
           <span className="text-xs text-gray-400">{formatValue(max)}</span>
         </div>

@@ -465,3 +465,66 @@ export const AgeIndicator: Story = {
     },
   },
 };
+
+/**
+ * With step markers - every 10 units
+ */
+export const StepsEvery10: Story = {
+  args: {
+    value: 45,
+    min: 0,
+    max: 100,
+    title: 'Progreso',
+    segments: 40,
+    showSteps: 10,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows step markers with dots and numbers every 10 units (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)',
+      },
+    },
+  },
+};
+
+/**
+ * With step markers - every 5 units
+ */
+export const StepsEvery5: Story = {
+  args: {
+    value: 47,
+    min: 0,
+    max: 100,
+    title: 'Progreso detallado',
+    segments: 40,
+    showSteps: 5,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows step markers with dots and numbers every 5 units',
+      },
+    },
+  },
+};
+
+/**
+ * With step markers - every 20 units
+ */
+export const StepsEvery20: Story = {
+  args: {
+    value: 65,
+    min: 0,
+    max: 100,
+    title: 'Progreso amplio',
+    segments: 40,
+    showSteps: 20,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows step markers with dots and numbers every 20 units (0, 20, 40, 60, 80, 100)',
+      },
+    },
+  },
+};

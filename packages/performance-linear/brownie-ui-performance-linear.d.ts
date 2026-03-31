@@ -19,6 +19,7 @@ declare module 'brownie-ui-performance-linear' {
     highlightLast?: boolean;
     showValue?: boolean;
     gap?: number;
+    showSteps?: number;
   }
 
   export const PerformanceLinear: React.ForwardRefExoticComponent<PerformanceLinearProps & React.RefAttributes<HTMLDivElement>>;
