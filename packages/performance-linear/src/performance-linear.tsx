@@ -408,7 +408,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           </div>
 
           {/* Step markers */}
-          {showSteps && (
+          {(showSteps || (customSteps && customSteps.length > 0)) && (
             <div className="relative" style={{ height: '12px', marginBottom: '-4px' }}>
               {generateSteps()}
             </div>
