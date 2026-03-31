@@ -407,12 +407,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         const sectionColor = section.color || '#6b7280'; // gray-500 default
         const isLast = index === sections.length - 1;
         
-        // Check contiguity with adjacent sections
-        const nextSection = sections[index + 1];
-        const isContiguousNext = nextSection && nextSection.start === section.end;
-        
-        const prevSection = sections[index - 1];
-        const isContiguousPrev = prevSection && prevSection.end === section.start;
+        // Note: Show all labels for now
         
         return (
           <div
@@ -457,10 +452,10 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   bottom: '12px',
                   transform: 'translateX(-50%)',
                   color: sectionColor,
-                  paddingLeft: isContiguousPrev ? '0' : '4px',
+                  paddingLeft: '4px',
                 }}
               >
-                {isContiguousPrev ? '' : (section.label || formatValue(section.start))}
+                {section.label || formatValue(section.start)}
               </span>
               
               {/* End label */}
@@ -471,10 +466,10 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   bottom: '12px',
                   transform: 'translateX(50%)',
                   color: sectionColor,
-                  paddingRight: isContiguousNext ? '0' : '4px',
+                  paddingRight: '4px',
                 }}
               >
-                {isContiguousNext ? '' : formatValue(section.end)}
+                {formatValue(section.end)}
               </span>
             </div>
             
