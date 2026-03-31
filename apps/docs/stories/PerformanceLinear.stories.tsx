@@ -60,10 +60,10 @@ const meta: Meta<typeof PerformanceLinear> = {
       description: 'Height of the bars in pixels',
       table: { defaultValue: { summary: '24' } },
     },
-    showTooltip: {
-      control: 'boolean',
-      description: 'Show value tooltip on hover',
-      table: { defaultValue: { summary: 'true' } },
+    gap: {
+      control: { type: 'range', min: 0, max: 10, step: 1 },
+      description: 'Gap between segments in pixels',
+      table: { defaultValue: { summary: '2' } },
     },
   },
 };
@@ -262,13 +262,13 @@ export const HeatmapGradient: Story = {
 };
 
 /**
- * Without tooltip
+ * Without value label
  */
-export const NoTooltip: Story = {
+export const NoValueLabel: Story = {
   args: {
     value: 75,
     title: 'Fear and Greed Index',
-    showTooltip: false,
+    showValue: false,
   },
 };
 
@@ -321,7 +321,6 @@ export const AnimationDemo: Story = {
           key={key}
           value={85}
           title="Fear and Greed Index"
-          animationDuration={1500}
         />
         <button
           onClick={() => setKey(k => k + 1)}
@@ -400,5 +399,69 @@ export const SegmentComparison: Story = {
   ),
   parameters: {
     layout: 'padded',
+  },
+};
+
+/**
+ * Gap comparison - Different gap sizes
+ */
+export const GapComparison: Story = {
+  render: () => (
+    <div className="space-y-6 max-w-2xl">
+      <PerformanceLinear
+        value={75}
+        title="No Gap (0px)"
+        segments={40}
+        gap={0}
+      />
+      <PerformanceLinear
+        value={75}
+        title="Small Gap (2px) - Default"
+        segments={40}
+        gap={2}
+      />
+      <PerformanceLinear
+        value={75}
+        title="Medium Gap (4px)"
+        segments={40}
+        gap={4}
+      />
+      <PerformanceLinear
+        value={75}
+        title="Large Gap (8px)"
+        segments={40}
+        gap={8}
+      />
+    </div>
+  ),
+  parameters: {
+    layout: 'padded',
+  },
+};
+
+/**
+ * Green to Gray gradient - Age indicator
+ */
+export const AgeIndicator: Story = {
+  args: {
+    value: 45,
+    min: 0,
+    max: 100,
+    title: 'Edad',
+    label: 'Edad',
+    segments: 40,
+    gap: 2,
+    gradient: [
+      { position: 0, color: '#22c55e' },    // Green
+      { position: 0.5, color: '#84cc16' },  // Lime
+      { position: 1, color: '#9ca3af' },    // Gray
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Green to Gray gradient with 40 segments and 2px gap',
+      },
+    },
   },
 };
