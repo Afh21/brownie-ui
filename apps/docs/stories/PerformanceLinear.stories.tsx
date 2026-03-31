@@ -564,7 +564,8 @@ export const CustomStepsWithLabels: Story = {
     min: 0,
     max: 100,
     title: 'Niveles de riesgo',
-    segments: 40,
+    segments: 20,
+    gap: 4,
     customSteps: [
       { start: 0, end: 20, label: 'Bajo' },
       { start: 20, end: 50, label: 'Medio' },
@@ -575,7 +576,7 @@ export const CustomStepsWithLabels: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Custom steps with custom labels for each range boundary',
+        story: 'Custom steps with custom labels for each range boundary (0, 20, 50, 80, 100)',
       },
     },
   },
