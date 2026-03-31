@@ -646,7 +646,7 @@ export const WithSections: Story = {
 };
 
 /**
- * Life stages with icons - Age groups
+ * Life stages with icons - Age groups (contiguous sections)
  */
 export const LifeStages: Story = {
   args: {
@@ -677,9 +677,9 @@ export const LifeStages: Story = {
         )
       },
       { 
-        start: 9, 
+        start: 5, 
         end: 18, 
-        label: '9',
+        label: '5',
         color: '#3b82f6',
         content: (
           <div className="flex flex-col items-center">
@@ -689,9 +689,9 @@ export const LifeStages: Story = {
         )
       },
       { 
-        start: 20, 
+        start: 18, 
         end: 30, 
-        label: '20',
+        label: '18',
         color: '#06b6d4',
         content: (
           <div className="flex flex-col items-center">
@@ -701,9 +701,9 @@ export const LifeStages: Story = {
         )
       },
       { 
-        start: 40, 
+        start: 30, 
         end: 65, 
-        label: '40',
+        label: '30',
         color: '#8b5cf6',
         content: (
           <div className="flex flex-col items-center">
@@ -713,9 +713,9 @@ export const LifeStages: Story = {
         )
       },
       { 
-        start: 70, 
-        end: 99, 
-        label: '70',
+        start: 65, 
+        end: 100, 
+        label: '65',
         color: '#ef4444',
         content: (
           <div className="flex flex-col items-center">
@@ -729,7 +729,7 @@ export const LifeStages: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Life stages represented with icons: Niño (0-5), Adolescente (9-18), Adulto (20-30), Adulto Mayor (40-65), Adulto Vegete (70-99)',
+        story: 'Life stages represented with icons: Niño (0-5), Adolescente (5-18), Adulto (18-30), Adulto Mayor (30-65), Adulto Vegete (65-100)',
       },
     },
   },

@@ -415,7 +415,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
               left: `${startPosition}%`,
               width: `${width}%`,
               top: `${barHeight + 8}px`,
-              paddingRight: isLast ? '0' : '8px', // Gap between sections
+              paddingRight: isLast ? '0' : '4px', // Smaller gap between sections
             }}
           >
             {/* Bracket container - lines pointing UP */}
@@ -428,7 +428,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                   backgroundColor: sectionColor 
                 }}
               />
-              {/* Right vertical line (going UP) - only if last section or different from next */}
+              {/* Right vertical line (going UP) */}
               <div 
                 className="absolute right-0 bottom-0 w-px"
                 style={{ 
@@ -454,6 +454,19 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
               >
                 {section.label || formatValue(section.start)}
               </span>
+              
+              {/* End label - shows the end value of the section */}
+              <span 
+                className="absolute text-[10px] font-medium"
+                style={{ 
+                  right: '0', 
+                  bottom: '12px',
+                  transform: 'translateX(50%)',
+                  color: sectionColor 
+                }}
+              >
+                {formatValue(section.end)}
+              </span>
             </div>
             
             {/* Custom content area - centered */}
@@ -462,7 +475,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
                 className="mt-2 w-full text-center"
                 style={{ 
                   borderRight: isLast ? 'none' : `1px solid ${sectionColor}20`,
-                  padding: '0 4px'
+                  padding: '0 2px'
                 }}
               >
                 {section.content}
