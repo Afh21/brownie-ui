@@ -581,3 +581,66 @@ export const CustomStepsWithLabels: Story = {
     },
   },
 };
+
+/**
+ * Sections with grouped ranges and custom content
+ */
+export const WithSections: Story = {
+  args: {
+    value: 75,
+    min: 0,
+    max: 100,
+    title: 'Fear and Greed Index',
+    segments: 40,
+    sections: [
+      { 
+        start: 0, 
+        end: 12, 
+        label: '0',
+        color: '#ef4444',
+        content: <div className="text-[10px] text-gray-500">Extreme Fear Zone</div>
+      },
+      { 
+        start: 12, 
+        end: 25, 
+        label: '12',
+        color: '#f97316',
+        content: <div className="text-[10px] text-gray-500">Fear Zone</div>
+      },
+      { 
+        start: 25, 
+        end: 60, 
+        label: '25',
+        color: '#eab308',
+        content: <div className="text-[10px] text-gray-500">Neutral Range</div>
+      },
+      { 
+        start: 60, 
+        end: 70, 
+        label: '60',
+        color: '#84cc16',
+      },
+      { 
+        start: 70, 
+        end: 90, 
+        label: '70',
+        color: '#22c55e',
+        content: <div className="text-[10px] text-gray-500">Greed Zone</div>
+      },
+      { 
+        start: 90, 
+        end: 100, 
+        label: '90',
+        color: '#16a34a',
+        content: <div className="text-[10px] text-gray-500">Extreme Greed</div>
+      },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grouped sections with bracket lines and custom content below each range',
+      },
+    },
+  },
+};

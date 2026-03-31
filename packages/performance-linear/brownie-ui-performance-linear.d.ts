@@ -12,6 +12,14 @@ declare module 'brownie-ui-performance-linear' {
     label?: string;
   }
 
+  export interface PerformanceSection {
+    start: number;
+    end: number;
+    label?: string;
+    content?: React.ReactNode;
+    color?: string;
+  }
+
   export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     min?: number;
@@ -27,6 +35,7 @@ declare module 'brownie-ui-performance-linear' {
     gap?: number;
     showSteps?: number;
     customSteps?: CustomStep[];
+    sections?: PerformanceSection[];
   }
 
   export const PerformanceLinear: React.ForwardRefExoticComponent<PerformanceLinearProps & React.RefAttributes<HTMLDivElement>>;

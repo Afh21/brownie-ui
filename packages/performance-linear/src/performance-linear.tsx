@@ -29,6 +29,22 @@ interface CustomStep {
 }
 
 /**
+ * Section configuration for grouping ranges with custom content
+ */
+export interface PerformanceSection {
+  /** Start value of the section */
+  start: number;
+  /** End value of the section */
+  end: number;
+  /** Optional label/title for the section */
+  label?: string;
+  /** React node to render below the section (custom content) */
+  content?: React.ReactNode;
+  /** Color for the section bracket line */
+  color?: string;
+}
+
+/**
  * Props for the PerformanceLinear component
  */
 export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -89,6 +105,11 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    * Example: [{ start: 0, end: 5 }, { start: 5, end: 12 }, { start: 12, end: 37 }]
    */
   customSteps?: CustomStep[];
+  /**
+   * Sections for grouping ranges with custom content below
+   * Example: [{ start: 0, end: 20, label: 'Low', content: <div>Risk: Low</div> }]
+   */
+  sections?: PerformanceSection[];
 }
 
 /**
@@ -192,6 +213,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       gap,
       showSteps,
       customSteps,
+      sections,
       className,
       ...props
     },
@@ -370,6 +392,92 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return steps;
     };
 
+    // Generate sections with bracket lines and custom content
+    const generateSections = () => {
+      if (!sections || sections.length === 0) return null;
+      
+      const range = max - min;
+      
+      return sections.map((section, index) => {
+        const startPercent = (section.start - min) / range;
+        const endPercent = (section.end - min) / range;
+        const startPosition = startPercent * 100;
+        const endPosition = endPercent * 100;
+        const width = endPosition - startPosition;
+        const sectionColor = section.color || '#6b7280'; // gray-500 default
+        
+        return (
+          <div
+            key={index}
+            className="absolute"
+            style={{
+              left: `${startPosition}%`,
+              width: `${width}%`,
+              top: `${barHeight + 4}px`,
+            }}
+          >
+            {/* Bracket line container */}
+            <div className="relative w-full" style={{ height: '20px' }}>
+              {/* Left vertical line */}
+              <div 
+                className="absolute left-0 top-0 w-px"
+                style={{ 
+                  height: '12px', 
+                  backgroundColor: sectionColor 
+                }}
+              />
+              {/* Right vertical line */}
+              <div 
+                className="absolute right-0 top-0 w-px"
+                style={{ 
+                  height: '12px', 
+                  backgroundColor: sectionColor 
+                }}
+              />
+              {/* Horizontal line */}
+              <div 
+                className="absolute left-0 top-0 w-full h-px"
+                style={{ backgroundColor: sectionColor }}
+              />
+              
+              {/* Start label */}
+              <span 
+                className="absolute text-[10px] font-medium"
+                style={{ 
+                  left: '0', 
+                  top: '14px',
+                  transform: 'translateX(-50%)',
+                  color: sectionColor 
+                }}
+              >
+                {section.label || formatValue(section.start)}
+              </span>
+              
+              {/* End label */}
+              <span 
+                className="absolute text-[10px] font-medium"
+                style={{ 
+                  right: '0', 
+                  top: '14px',
+                  transform: 'translateX(50%)',
+                  color: sectionColor 
+                }}
+              >
+                {formatValue(section.end)}
+              </span>
+            </div>
+            
+            {/* Custom content area */}
+            {section.content && (
+              <div className="mt-4 px-1">
+                {section.content}
+              </div>
+            )}
+          </div>
+        );
+      });
+    };
+
     // Get label based on position if not provided
     const getDefaultLabel = (pos: number): string => {
       if (pos < 0.2) return 'Extreme Fear';
@@ -411,6 +519,13 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           {(showSteps || (customSteps && customSteps.length > 0)) && (
             <div className="relative" style={{ height: '12px', marginBottom: '-4px' }}>
               {generateSteps()}
+            </div>
+          )}
+
+          {/* Sections with brackets and content */}
+          {sections && sections.length > 0 && (
+            <div className="relative" style={{ minHeight: '24px' }}>
+              {generateSections()}
             </div>
           )}
 
