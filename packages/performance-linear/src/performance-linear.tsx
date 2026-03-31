@@ -169,6 +169,9 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     },
     ref
   ) => {
+    // Gap as percentage for consistency
+    const gapPercent = 0.25;
+    
     // Calculate percentage (0-1) - clamped
     const percentage = React.useMemo(() => {
       return Math.max(0, Math.min(1, (value - min) / (max - min)));
@@ -177,16 +180,21 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     // Find the last active segment index
     const lastActiveIndex = Math.floor(percentage * (segments - 1));
     
-    // Calculate position for value label - center of last active segment
-    const segmentWidth = 100 / segments;
-    const valuePosition = (lastActiveIndex * segmentWidth) + (segmentWidth / 2) - 1;
-
+    // Calculate position for value label - matches segment positioning exactly
+    // Total gap space + available space calculation
+    const totalGapSpace = (segments - 1) * gapPercent;
+    const availableSpace = 100 - totalGapSpace;
+    const segmentWidth = availableSpace / segments;
+    // Position: sum of all segments and gaps before + half of current segment
+    const valuePosition = (lastActiveIndex * segmentWidth) + (lastActiveIndex * gapPercent) + (segmentWidth / 2);
+    
     // Generate bar segments
     const generateSegments = () => {
       const segmentArray = [];
-      const segmentWidth = 100 / segments;
-      const gap = 2; // gap percentage
-      const actualWidth = segmentWidth - gap;
+      // Each segment takes equal portion of remaining space after gaps
+      const totalGapSpace = (segments - 1) * gapPercent;
+      const availableSpace = 100 - totalGapSpace;
+      const segmentWidth = availableSpace / segments;
 
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
@@ -203,7 +211,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             key={i}
             className="rounded-sm transition-all duration-300"
             style={{
-              width: `${actualWidth}%`,
+              width: `${segmentWidth}%`,
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.15,
@@ -250,8 +258,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
           className="relative"
           style={{ height: barHeight }}
         >
-          {/* Segmented bars */}
-          <div className="flex gap-1 w-full h-full items-center">
+          {/* Segmented bars - gap as percentage for consistency */}
+          <div className="flex w-full h-full items-center" style={{ gap: '0.25%' }}>
             {generateSegments()}
           </div>
         </div>
