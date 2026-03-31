@@ -14,6 +14,8 @@ declare module 'brownie-ui-performance' {
 
   export interface PerformanceProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
+    min?: number;
+    max?: number;
     title?: string;
     unit?: string;
     maxSegments?: number;

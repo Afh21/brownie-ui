@@ -39,6 +39,14 @@ export interface PerformanceProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   value: number;
   /**
+   * Minimum value of the scale (default: 0)
+   */
+  min?: number;
+  /**
+   * Maximum value of the scale (default: 100)
+   */
+  max?: number;
+  /**
    * Title displayed at the top
    */
   title?: string;
@@ -106,6 +114,8 @@ const Performance = React.forwardRef<HTMLDivElement, PerformanceProps>(
   (
     {
       value,
+      min = 0,
+      max = 100,
       title = 'Performance',
       unit = 'point',
       maxSegments = 20,
@@ -128,8 +138,9 @@ const Performance = React.forwardRef<HTMLDivElement, PerformanceProps>(
     const [displayValue, setDisplayValue] = React.useState(0);
     const [displaySegments, setDisplaySegments] = React.useState(0);
 
-    // Calculate active segments from value if not provided
-    const targetSegments = activeSegments ?? Math.round((value / 100) * maxSegments);
+    // Calculate active segments proportionally to the range
+    const percentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    const targetSegments = activeSegments ?? Math.round(percentage * maxSegments);
     const clampedSegments = Math.max(0, Math.min(maxSegments, targetSegments));
 
     // Trend display
@@ -162,7 +173,7 @@ const Performance = React.forwardRef<HTMLDivElement, PerformanceProps>(
       };
 
       requestAnimationFrame(animate);
-    }, [value, clampedSegments, animationDuration]);
+    }, [value, min, max, clampedSegments, animationDuration]);
 
     // Generate bar segments
     const generateBars = () => {

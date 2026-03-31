@@ -31,6 +31,16 @@ const meta: Meta<typeof Performance> = {
       control: { type: 'range', min: 0, max: 1000, step: 1 },
       description: 'Current value to display',
     },
+    min: {
+      control: 'number',
+      description: 'Minimum value of the scale',
+      table: { defaultValue: { summary: '0' } },
+    },
+    max: {
+      control: 'number',
+      description: 'Maximum value of the scale',
+      table: { defaultValue: { summary: '100' } },
+    },
     title: {
       control: 'text',
       description: 'Title displayed at the top',
@@ -74,6 +84,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     value: 432,
+    min: 0,
+    max: 1000,
     title: 'Performance',
     unit: 'point',
     trend: { value: '+10%', direction: 'up', showInfo: true },

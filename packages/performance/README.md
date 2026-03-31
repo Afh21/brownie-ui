@@ -36,6 +36,8 @@ function App() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `number` | required | Current value to display |
+| `min` | `number` | `0` | Minimum value of the scale |
+| `max` | `number` | `100` | Maximum value of the scale |
 | `title` | `string` | `"Performance"` | Title displayed at the top |
 | `unit` | `string` | `"point"` | Unit label (point, pts, %, etc.) |
 | `maxSegments` | `number` | `20` | Maximum number of bars/segments |
@@ -77,6 +79,18 @@ The `trend` prop accepts either a string or an object:
     active: '#3b82f6',   // blue
     inactive: '#e5e7eb', // gray
   }}
+/>
+```
+
+### Custom Range (0-1000)
+
+```tsx
+<Performance
+  value={432}
+  min={0}
+  max={1000}
+  title="Score"
+  unit="points"
 />
 ```
 
