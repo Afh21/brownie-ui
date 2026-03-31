@@ -646,7 +646,7 @@ export const WithSections: Story = {
 };
 
 /**
- * Life stages with icons - Age groups (contiguous sections)
+ * Life stages with icons - All data as requested (with gaps)
  */
 export const LifeStages: Story = {
   args: {
@@ -678,8 +678,15 @@ export const LifeStages: Story = {
       },
       { 
         start: 5, 
-        end: 18, 
+        end: 9, 
         label: '5',
+        color: '#9ca3af',
+        content: <div className="text-[9px] text-gray-400">-</div>
+      },
+      { 
+        start: 9, 
+        end: 18, 
+        label: '9',
         color: '#3b82f6',
         content: (
           <div className="flex flex-col items-center">
@@ -690,8 +697,15 @@ export const LifeStages: Story = {
       },
       { 
         start: 18, 
-        end: 30, 
+        end: 20, 
         label: '18',
+        color: '#9ca3af',
+        content: <div className="text-[9px] text-gray-400">-</div>
+      },
+      { 
+        start: 20, 
+        end: 30, 
+        label: '20',
         color: '#06b6d4',
         content: (
           <div className="flex flex-col items-center">
@@ -702,8 +716,15 @@ export const LifeStages: Story = {
       },
       { 
         start: 30, 
-        end: 65, 
+        end: 40, 
         label: '30',
+        color: '#9ca3af',
+        content: <div className="text-[9px] text-gray-400">-</div>
+      },
+      { 
+        start: 40, 
+        end: 65, 
+        label: '40',
         color: '#8b5cf6',
         content: (
           <div className="flex flex-col items-center">
@@ -714,8 +735,15 @@ export const LifeStages: Story = {
       },
       { 
         start: 65, 
-        end: 100, 
+        end: 70, 
         label: '65',
+        color: '#9ca3af',
+        content: <div className="text-[9px] text-gray-400">-</div>
+      },
+      { 
+        start: 70, 
+        end: 99, 
+        label: '70',
         color: '#ef4444',
         content: (
           <div className="flex flex-col items-center">
@@ -724,12 +752,19 @@ export const LifeStages: Story = {
           </div>
         )
       },
+      { 
+        start: 99, 
+        end: 100, 
+        label: '99',
+        color: '#9ca3af',
+        content: <div className="text-[9px] text-gray-400">-</div>
+      },
     ],
   },
   parameters: {
     docs: {
       description: {
-        story: 'Life stages represented with icons: Niño (0-5), Adolescente (5-18), Adulto (18-30), Adulto Mayor (30-65), Adulto Vegete (65-100)',
+        story: 'Life stages with all values: Niño (0-5), gap (5-9), Adolescente (9-18), gap (18-20), Adulto (20-30), gap (30-40), Adulto Mayor (40-65), gap (65-70), Adulto Vegete (70-99), end (99-100)',
       },
     },
   },
