@@ -81,10 +81,8 @@ const defaultGradient: ColorStop[] = [
  * Get color at a specific position in the gradient
  */
 function getGradientColor(position: number, gradient: ColorStop[]): string {
-  // Clamp position between 0 and 1
   position = Math.max(0, Math.min(1, position));
   
-  // Find the two color stops that surround this position
   let lower = gradient[0];
   let upper = gradient[gradient.length - 1];
   
@@ -96,12 +94,10 @@ function getGradientColor(position: number, gradient: ColorStop[]): string {
     }
   }
   
-  // If at exact position, return that color
   if (lower.position === upper.position) {
     return lower.color;
   }
   
-  // Interpolate between the two colors
   const range = upper.position - lower.position;
   const ratio = (position - lower.position) / range;
   
@@ -134,21 +130,6 @@ function interpolateColor(color1: string, color2: string, ratio: number): string
  * PerformanceLinear Component - A linear segmented bar gauge
  * 
  * Perfect for Fear & Greed Index, progress indicators, and horizontal metrics.
- * 
- * Features:
- * - Horizontal segmented bars with gradient colors
- * - Vertical indicator bar
- * - Smooth animations
- * - Customizable gradient
- * 
- * @example
- * ```tsx
- * <PerformanceLinear 
- *   value={75} 
- *   title="Fear and Greed Index"
- *   label="Extreme Greed"
- * />
- * ```
  */
 const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProps>(
   (
@@ -169,37 +150,21 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     },
     ref
   ) => {
-    // Animated states
-    const [displayValue, setDisplayValue] = React.useState(min);
-    const [indicatorPosition, setIndicatorPosition] = React.useState(0);
+    // Calculate target percentage (0-1) - clamped
+    const targetPercentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    
+    // Animation state - start from 0 and animate to target
+    const [animatedPercentage, setAnimatedPercentage] = React.useState(0);
     const [isHovered, setIsHovered] = React.useState(false);
 
-    // Calculate target percentage (0-1)
-    const targetPercentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
-
-    // Store animation start values in refs to avoid dependency issues
-    const animationRef = React.useRef({
-      startValue: min,
-      startPosition: 0,
-      targetValue: value,
-      targetPosition: targetPercentage,
-    });
-
-    // Update refs when value changes
+    // Animate on mount and when value changes
     React.useEffect(() => {
-      animationRef.current = {
-        startValue: displayValue,
-        startPosition: indicatorPosition,
-        targetValue: value,
-        targetPosition: targetPercentage,
-      };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
-
-    // Trigger animation
-    React.useEffect(() => {
+      // Reset to 0 when value changes to restart animation
+      setAnimatedPercentage(0);
+      
       const startTime = Date.now();
-      const { startValue, startPosition, targetValue, targetPosition } = animationRef.current;
+      const startValue = 0;
+      const endValue = targetPercentage;
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
@@ -208,11 +173,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         // Easing (ease-out cubic)
         const easeOut = 1 - Math.pow(1 - progress, 3);
         
-        const currentValue = Math.round(startValue + (targetValue - startValue) * easeOut);
-        const currentPosition = startPosition + (targetPosition - startPosition) * easeOut;
-        
-        setDisplayValue(currentValue);
-        setIndicatorPosition(currentPosition);
+        const currentValue = startValue + (endValue - startValue) * easeOut;
+        setAnimatedPercentage(currentValue);
         
         if (progress < 1) {
           requestAnimationFrame(animate);
@@ -220,7 +182,10 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       };
       
       requestAnimationFrame(animate);
-    }, [value, animationDuration]);
+    }, [value, min, max, targetPercentage, animationDuration]);
+
+    // Current display value based on animation
+    const displayValue = Math.round(min + animatedPercentage * (max - min));
 
     // Generate bar segments
     const generateSegments = () => {
@@ -232,18 +197,19 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
         const color = getGradientColor(position, gradient);
-        const isActive = position <= targetPercentage;
+        const isActive = position <= animatedPercentage;
 
         segmentArray.push(
           <div
             key={i}
-            className="rounded-sm transition-opacity duration-300"
+            className="rounded-sm"
             style={{
               width: `${actualWidth}%`,
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.2,
-              transitionDelay: `${i * 10}ms`,
+              transition: 'opacity 0.3s ease-out',
+              transitionDelay: `${i * 5}ms`,
             }}
           />
         );
@@ -291,14 +257,14 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             {generateSegments()}
           </div>
 
-          {/* Indicator bar */}
+          {/* Indicator bar - positioned at animated percentage */}
           <div
             className="absolute top-0 w-1 bg-gray-800 dark:bg-white rounded-full shadow-md pointer-events-none"
             style={{
               height: '120%',
-              left: `${indicatorPosition * 100}%`,
+              left: `${animatedPercentage * 100}%`,
               transform: 'translateX(-50%) translateY(-10%)',
-              transition: 'left 0.1s ease-out',
+              transition: animationDuration > 0 ? 'left 0.05s linear' : 'none',
             }}
           />
 
@@ -307,11 +273,11 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             <div
               className="absolute -top-10 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg pointer-events-none whitespace-nowrap z-10"
               style={{
-                left: `${indicatorPosition * 100}%`,
+                left: `${targetPercentage * 100}%`,
                 transform: 'translateX(-50%)',
               }}
             >
-              {formatValue(displayValue)}
+              {formatValue(value)}
             </div>
           )}
         </div>
