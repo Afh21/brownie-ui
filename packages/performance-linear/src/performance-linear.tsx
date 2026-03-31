@@ -151,41 +151,61 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     ref
   ) => {
     // Calculate target percentage (0-1) - clamped
-    const targetPercentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    const targetPercentage = React.useMemo(() => {
+      return Math.max(0, Math.min(1, (value - min) / (max - min)));
+    }, [value, min, max]);
     
-    // Animation state - start from 0 and animate to target
-    const [animatedPercentage, setAnimatedPercentage] = React.useState(0);
+    // Animation state - start from 0
+    const [currentProgress, setCurrentProgress] = React.useState(0);
     const [isHovered, setIsHovered] = React.useState(false);
+    
+    // Track animation frame ID for cleanup
+    const animationRef = React.useRef<number | null>(null);
 
-    // Animate on mount and when value changes
+    // Animate when value changes
     React.useEffect(() => {
-      // Reset to 0 when value changes to restart animation
-      setAnimatedPercentage(0);
+      // Cancel any existing animation
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
       
       const startTime = Date.now();
-      const startValue = 0;
-      const endValue = targetPercentage;
+      const startProgress = currentProgress;
+      const endProgress = targetPercentage;
+      
+      // If animation is instant, just set the value
+      if (animationDuration <= 0) {
+        setCurrentProgress(endProgress);
+        return;
+      }
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / animationDuration, 1);
+        const rawProgress = Math.min(elapsed / animationDuration, 1);
         
         // Easing (ease-out cubic)
-        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const easeProgress = 1 - Math.pow(1 - rawProgress, 3);
         
-        const currentValue = startValue + (endValue - startValue) * easeOut;
-        setAnimatedPercentage(currentValue);
+        const newProgress = startProgress + (endProgress - startProgress) * easeProgress;
+        setCurrentProgress(newProgress);
         
-        if (progress < 1) {
-          requestAnimationFrame(animate);
+        if (rawProgress < 1) {
+          animationRef.current = requestAnimationFrame(animate);
         }
       };
       
-      requestAnimationFrame(animate);
-    }, [value, min, max, targetPercentage, animationDuration]);
+      animationRef.current = requestAnimationFrame(animate);
+      
+      // Cleanup on unmount or when dependencies change
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+      };
+    }, [value, targetPercentage, animationDuration]); // Solo dependencias esenciales
 
     // Current display value based on animation
-    const displayValue = Math.round(min + animatedPercentage * (max - min));
+    const displayValue = Math.round(min + currentProgress * (max - min));
 
     // Generate bar segments
     const generateSegments = () => {
@@ -197,7 +217,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
         const color = getGradientColor(position, gradient);
-        const isActive = position <= animatedPercentage;
+        // Segment is active if its position is <= current progress
+        const isActive = position <= currentProgress;
 
         segmentArray.push(
           <div
@@ -208,8 +229,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.2,
-              transition: 'opacity 0.3s ease-out',
-              transitionDelay: `${i * 5}ms`,
+              transition: animationDuration > 0 ? 'opacity 0.15s ease-out' : undefined,
             }}
           />
         );
@@ -228,6 +248,9 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     };
 
     const displayLabel = label || getDefaultLabel(targetPercentage);
+    
+    // Calculate indicator position (clamped between 0-100%)
+    const indicatorLeft = Math.max(0, Math.min(100, currentProgress * 100));
 
     return (
       <div
@@ -257,18 +280,18 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             {generateSegments()}
           </div>
 
-          {/* Indicator bar - positioned at animated percentage */}
+          {/* Indicator bar - usando left porcentaje calculado */}
           <div
             className="absolute top-0 w-1 bg-gray-800 dark:bg-white rounded-full shadow-md pointer-events-none"
             style={{
               height: '120%',
-              left: `${animatedPercentage * 100}%`,
+              left: `${indicatorLeft}%`,
               transform: 'translateX(-50%) translateY(-10%)',
-              transition: animationDuration > 0 ? 'left 0.05s linear' : 'none',
+              // Sin transition CSS - controlado por React frame a frame
             }}
           />
 
-          {/* Tooltip */}
+          {/* Tooltip - posicionado en el valor target (final), no el animado */}
           {showTooltip && isHovered && (
             <div
               className="absolute -top-10 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg pointer-events-none whitespace-nowrap z-10"
