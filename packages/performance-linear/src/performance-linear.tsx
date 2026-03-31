@@ -53,10 +53,6 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    */
   gradient?: ColorStop[];
   /**
-   * Animation duration in milliseconds
-   */
-  animationDuration?: number;
-  /**
    * Format function for the value
    */
   formatValue?: (value: number) => string;
@@ -142,7 +138,6 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       segments = 40,
       barHeight = 24,
       gradient = defaultGradient,
-      animationDuration = 1000,
       formatValue = (v) => v.toString(),
       showTooltip = true,
       className,
@@ -150,59 +145,12 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     },
     ref
   ) => {
-    // Calculate target percentage (0-1) - clamped
-    const targetPercentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    // Calculate percentage (0-1) - clamped
+    const percentage = React.useMemo(() => {
+      return Math.max(0, Math.min(1, (value - min) / (max - min)));
+    }, [value, min, max]);
     
-    // Animation state
-    const [progress, setProgress] = React.useState(0);
     const [isHovered, setIsHovered] = React.useState(false);
-    
-    // Refs para la animación (evitan problemas con closures)
-    const animationFrameRef = React.useRef<number | null>(null);
-    const startTimeRef = React.useRef<number>(0);
-    const startProgressRef = React.useRef<number>(0);
-
-    // Animar cuando cambia el valor
-    React.useEffect(() => {
-      // Cancelar animación anterior
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      
-      startTimeRef.current = Date.now();
-      startProgressRef.current = progress;
-      
-      const animate = () => {
-        const elapsed = Date.now() - startTimeRef.current;
-        const rawProgress = Math.min(elapsed / animationDuration, 1);
-        
-        // Easing (ease-out cubic)
-        const easeProgress = 1 - Math.pow(1 - rawProgress, 3);
-        
-        // Interpolar entre el progreso inicial y el target
-        const newProgress = startProgressRef.current + (targetPercentage - startProgressRef.current) * easeProgress;
-        
-        setProgress(newProgress);
-        
-        if (rawProgress < 1) {
-          animationFrameRef.current = requestAnimationFrame(animate);
-        }
-      };
-      
-      animationFrameRef.current = requestAnimationFrame(animate);
-      
-      // Cleanup
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-      };
-    // Solo cuando cambia el valor, no cuando cambia el progress
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value, animationDuration]);
-
-    // Current display value based on animation
-    const displayValue = Math.round(min + progress * (max - min));
 
     // Generate bar segments
     const generateSegments = () => {
@@ -214,17 +162,19 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
         const color = getGradientColor(position, gradient);
-        const isActive = position <= progress;
+        // Segment is active if its position is <= percentage
+        const isActive = position <= percentage;
 
         segmentArray.push(
           <div
             key={i}
-            className="rounded-sm"
+            className="rounded-sm transition-opacity duration-300"
             style={{
               width: `${actualWidth}%`,
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.15,
+              transitionDelay: `${i * 5}ms`,
             }}
           />
         );
@@ -242,10 +192,10 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return 'Extreme Greed';
     };
 
-    const displayLabel = label || getDefaultLabel(targetPercentage);
+    const displayLabel = label || getDefaultLabel(percentage);
     
-    // Calculate indicator left position (clamp entre 0 y 100)
-    const indicatorLeft = Math.max(0, Math.min(100, progress * 100));
+    // Calculate indicator position
+    const indicatorLeft = percentage * 100;
 
     return (
       <div
@@ -275,11 +225,11 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             {generateSegments()}
           </div>
 
-          {/* Indicator bar */}
+          {/* Indicator bar - posicionado exactamente en el porcentaje */}
           <div
-            className="absolute top-1/2 w-0.5 bg-gray-900 dark:bg-white rounded-full shadow-sm pointer-events-none"
+            className="absolute top-1/2 w-0.5 bg-gray-900 dark:bg-white rounded-full pointer-events-none"
             style={{
-              height: '140%',
+              height: '130%',
               left: `${indicatorLeft}%`,
               transform: 'translate(-50%, -50%)',
             }}
@@ -290,7 +240,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             <div
               className="absolute -top-8 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg pointer-events-none whitespace-nowrap z-10"
               style={{
-                left: `${targetPercentage * 100}%`,
+                left: `${indicatorLeft}%`,
                 transform: 'translateX(-50%)',
               }}
             >
