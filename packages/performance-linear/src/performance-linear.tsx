@@ -256,7 +256,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
             className="absolute flex flex-col items-center"
             style={{
               left: `${stepPosition}%`,
-              top: `${barHeight + 2}px`,
+              top: '2px',
               transform: 'translateX(-50%)',
             }}
           >
