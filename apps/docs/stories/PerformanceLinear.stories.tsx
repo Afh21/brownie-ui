@@ -646,7 +646,7 @@ export const WithSections: Story = {
 };
 
 /**
- * Life stages with icons - All data as requested (with gaps)
+ * Life stages with icons - Final showcase
  */
 export const LifeStages: Story = {
   args: {
@@ -764,7 +764,7 @@ export const LifeStages: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Life stages with all values: Niño (0-5), gap (5-9), Adolescente (9-18), gap (18-20), Adulto (20-30), gap (30-40), Adulto Mayor (40-65), gap (65-70), Adulto Vegete (70-99), end (99-100)',
+        story: 'Complete life stages example with all values (0, 5, 9, 18, 20, 30, 40, 65, 70, 99, 100) and padding to avoid overlap',
       },
     },
   },
