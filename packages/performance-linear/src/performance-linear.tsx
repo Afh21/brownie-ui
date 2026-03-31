@@ -57,9 +57,9 @@ export interface PerformanceLinearProps extends React.HTMLAttributes<HTMLDivElem
    */
   formatValue?: (value: number) => string;
   /**
-   * Whether to show the value tooltip on hover
+   * Whether to highlight the last active segment
    */
-  showTooltip?: boolean;
+  highlightLast?: boolean;
 }
 
 /**
@@ -123,6 +123,25 @@ function interpolateColor(color1: string, color2: string, ratio: number): string
 }
 
 /**
+ * Brighten a color by a factor (0-1)
+ * Makes the color more vivid/intense
+ */
+function brightenColor(color: string, factor: number = 0.3): string {
+  const hex = color.replace('#', '');
+  
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+  
+  // Increase each channel towards 255
+  r = Math.min(255, Math.round(r + (255 - r) * factor));
+  g = Math.min(255, Math.round(g + (255 - g) * factor));
+  b = Math.min(255, Math.round(b + (255 - b) * factor));
+  
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
+/**
  * PerformanceLinear Component - A linear segmented bar gauge
  * 
  * Perfect for Fear & Greed Index, progress indicators, and horizontal metrics.
@@ -139,7 +158,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       barHeight = 24,
       gradient = defaultGradient,
       formatValue = (v) => v.toString(),
-      showTooltip = true,
+      highlightLast = true,
       className,
       ...props
     },
@@ -149,8 +168,9 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     const percentage = React.useMemo(() => {
       return Math.max(0, Math.min(1, (value - min) / (max - min)));
     }, [value, min, max]);
-    
-    const [isHovered, setIsHovered] = React.useState(false);
+
+    // Find the index of the last active segment
+    const lastActiveIndex = Math.floor(percentage * (segments - 1));
 
     // Generate bar segments
     const generateSegments = () => {
@@ -161,20 +181,27 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
 
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
-        const color = getGradientColor(position, gradient);
+        const baseColor = getGradientColor(position, gradient);
         // Segment is active if its position is <= percentage
         const isActive = position <= percentage;
+        // Check if this is the last active segment
+        const isLastActive = highlightLast && isActive && i === lastActiveIndex;
+        // If last active, brighten the color
+        const color = isLastActive ? brightenColor(baseColor, 0.4) : baseColor;
 
         segmentArray.push(
           <div
             key={i}
-            className="rounded-sm transition-opacity duration-300"
+            className="rounded-sm transition-all duration-300"
             style={{
               width: `${actualWidth}%`,
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.15,
+              transform: isLastActive ? 'scaleY(1.15)' : 'scaleY(1)',
+              boxShadow: isLastActive ? `0 0 8px ${color}` : 'none',
               transitionDelay: `${i * 5}ms`,
+              zIndex: isLastActive ? 10 : 1,
             }}
           />
         );
@@ -214,26 +241,11 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         <div
           className="relative"
           style={{ height: barHeight }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
           {/* Segmented bars */}
-          <div className="flex gap-1 w-full h-full">
+          <div className="flex gap-1 w-full h-full items-center">
             {generateSegments()}
           </div>
-
-          {/* Tooltip */}
-          {showTooltip && isHovered && (
-            <div
-              className="absolute -top-8 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg pointer-events-none whitespace-nowrap z-10"
-              style={{
-                left: `${percentage * 100}%`,
-                transform: 'translateX(-50%)',
-              }}
-            >
-              {formatValue(value)}
-            </div>
-          )}
         </div>
 
         {/* Scale labels */}

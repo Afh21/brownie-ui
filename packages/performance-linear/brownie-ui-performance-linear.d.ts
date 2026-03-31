@@ -15,9 +15,8 @@ declare module 'brownie-ui-performance-linear' {
     segments?: number;
     barHeight?: number;
     gradient?: ColorStop[];
-    animationDuration?: number;
     formatValue?: (value: number) => string;
-
+    highlightLast?: boolean;
   }
 
   export const PerformanceLinear: React.ForwardRefExoticComponent<PerformanceLinearProps & React.RefAttributes<HTMLDivElement>>;
