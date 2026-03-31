@@ -198,7 +198,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
               height: '100%',
               backgroundColor: color,
               opacity: isActive ? 1 : 0.15,
-              boxShadow: isLastActive ? '0 0 0 2px #d1d5db' : 'none',
+              boxShadow: 'none',
               transitionDelay: `${i * 5}ms`,
               zIndex: isLastActive ? 10 : 1,
             }}
