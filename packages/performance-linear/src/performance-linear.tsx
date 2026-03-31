@@ -186,22 +186,19 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     const lastActiveIndex = Math.floor(percentage * (segments - 1));
     
     // Calculate position for value label
-    // Each segment takes equal width, gaps are in pixels
-    const containerWidth = 100; // percentage
-    const totalGapPixels = (segments - 1) * gapSize;
-    // Convert gap to percentage of container (approximate for positioning)
-    const gapPercent = (gapSize / 400) * 100; // Assuming ~400px container
-    const segmentWidth = (containerWidth - ((segments - 1) * gapPercent)) / segments;
-    // Position: sum of segments and gaps before + half of current segment
-    const valuePosition = (lastActiveIndex * segmentWidth) + (lastActiveIndex * gapPercent) + (segmentWidth / 2);
+    // We use a consistent calculation: total space is divided evenly including gaps
+    // Each "unit" = segment + gap (except last segment has no gap after)
+    // Position = (lastIndex / (segments - 1)) * 100 for the end of last segment
+    // But we want the center, so we add half a segment width
+    const segmentPercent = 100 / segments;
+    const valuePosition = (lastActiveIndex * segmentPercent) + (segmentPercent / 2);
     
     // Generate bar segments
     const generateSegments = () => {
       const segmentArray = [];
-      // Each segment takes equal portion of remaining space after gaps
-      const totalGapSpace = (segments - 1) * gapPercent;
-      const availableSpace = 100 - totalGapSpace;
-      const segmentWidth = availableSpace / segments;
+      // With flex and gap in pixels, segments grow to fill space
+      // We set width as percentage to maintain proportions
+      const segmentWidth = 100 / segments;
 
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
