@@ -174,14 +174,32 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
     const [indicatorPosition, setIndicatorPosition] = React.useState(0);
     const [isHovered, setIsHovered] = React.useState(false);
 
-    // Calculate percentage (0-1)
-    const percentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    // Calculate target percentage (0-1)
+    const targetPercentage = Math.max(0, Math.min(1, (value - min) / (max - min)));
+
+    // Store animation start values in refs to avoid dependency issues
+    const animationRef = React.useRef({
+      startValue: min,
+      startPosition: 0,
+      targetValue: value,
+      targetPosition: targetPercentage,
+    });
+
+    // Update refs when value changes
+    React.useEffect(() => {
+      animationRef.current = {
+        startValue: displayValue,
+        startPosition: indicatorPosition,
+        targetValue: value,
+        targetPosition: targetPercentage,
+      };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value]);
 
     // Trigger animation
     React.useEffect(() => {
       const startTime = Date.now();
-      const startValue = displayValue;
-      const startPosition = indicatorPosition;
+      const { startValue, startPosition, targetValue, targetPosition } = animationRef.current;
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
@@ -190,8 +208,8 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         // Easing (ease-out cubic)
         const easeOut = 1 - Math.pow(1 - progress, 3);
         
-        const currentValue = Math.round(startValue + (value - startValue) * easeOut);
-        const currentPosition = startPosition + (percentage - startPosition) * easeOut;
+        const currentValue = Math.round(startValue + (targetValue - startValue) * easeOut);
+        const currentPosition = startPosition + (targetPosition - startPosition) * easeOut;
         
         setDisplayValue(currentValue);
         setIndicatorPosition(currentPosition);
@@ -202,7 +220,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       };
       
       requestAnimationFrame(animate);
-    }, [value, min, max, percentage, animationDuration]);
+    }, [value, animationDuration]);
 
     // Generate bar segments
     const generateSegments = () => {
@@ -214,7 +232,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       for (let i = 0; i < segments; i++) {
         const position = i / (segments - 1);
         const color = getGradientColor(position, gradient);
-        const isActive = position <= indicatorPosition;
+        const isActive = position <= targetPercentage;
 
         segmentArray.push(
           <div
@@ -243,7 +261,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
       return 'Extreme Greed';
     };
 
-    const displayLabel = label || getDefaultLabel(percentage);
+    const displayLabel = label || getDefaultLabel(targetPercentage);
 
     return (
       <div
