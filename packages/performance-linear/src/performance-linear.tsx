@@ -187,7 +187,7 @@ const PerformanceLinear = React.forwardRef<HTMLDivElement, PerformanceLinearProp
         // Check if this is the last active segment
         const isLastActive = highlightLast && isActive && i === lastActiveIndex;
         // If last active, use the highlight green color
-        const color = isLastActive ? '#2E7D32' : baseColor;
+        const color = isLastActive ? '#4CAF50' : baseColor;
 
         segmentArray.push(
           <div
