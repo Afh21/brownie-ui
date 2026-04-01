@@ -1,26 +1,26 @@
 {
-  "name": "brownie-ui-performance-linear",
-  "version": "0.1.4",
-  "description": "A linear segmented performance bar component for Brownie UI",
+  "name": "brownie-ui-calendar",
+  "version": "0.1.0",
+  "description": "A modern, accessible calendar component library for Brownie UI",
   "author": "Brownie UI Team",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tu-usuario/brownie-ui.git",
-    "directory": "packages/performance-linear"
+    "directory": "packages/calendar"
   },
   "keywords": [
     "react",
-    "performance",
-    "linear",
-    "gauge",
-    "fear-greed",
-    "index",
-    "metrics",
+    "calendar",
+    "datepicker",
+    "daterange",
+    "events",
+    "scheduler",
     "ui",
     "components",
     "tailwindcss",
-    "brownie-ui"
+    "brownie-ui",
+    "shadcn"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -29,7 +29,7 @@
   "files": [
     "dist",
     "dist/**/*",
-    "brownie-ui-performance-linear.d.ts",
+    "brownie-ui-calendar.d.ts",
     "README.md",
     "LICENSE"
   ],
@@ -41,15 +41,16 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external react,brownie-ui-core",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react,brownie-ui-core",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react,brownie-ui-core,date-fns",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react,brownie-ui-core,date-fns",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "brownie-ui-core": "0.1.3"
+    "brownie-ui-core": "0.1.3",
+    "date-fns": "^3.6.0"
   },
   "devDependencies": {
     "@brownie-ui/tsconfig": "workspace:*",

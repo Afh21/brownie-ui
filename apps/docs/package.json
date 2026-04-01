@@ -16,6 +16,7 @@
     "brownie-ui-gauge": "workspace:*",
     "brownie-ui-performance": "workspace:*",
     "brownie-ui-performance-linear": "workspace:*",
+    "brownie-ui-calendar": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
