@@ -1,19 +1,138 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { EventCalendar } from 'brownie-ui-calendar';
+import { Calendar, DatePicker, DateRangePicker, EventCalendar } from 'brownie-ui-calendar';
 import type { CalendarEvent } from 'brownie-ui-calendar';
 
-const meta: Meta<typeof EventCalendar> = {
-  title: 'Components/EventCalendar',
-  component: EventCalendar,
+// Calendar Component Stories
+const calendarMeta: Meta<typeof Calendar> = {
+  title: 'Components/Calendar/Calendar',
+  component: Calendar,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'Basic calendar component for date display and selection',
+      },
+    },
   },
   tags: ['autodocs'],
 };
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default calendarMeta;
+type CalendarStory = StoryObj<typeof calendarMeta>;
+
+export const BasicCalendar: CalendarStory = {
+  render: () => {
+    const [date, setDate] = useState(new Date());
+    return (
+      <div className="w-[400px]">
+        <Calendar value={date} onChange={setDate} />
+      </div>
+    );
+  },
+  name: 'Basic',
+};
+
+export const CalendarWithMinMax: CalendarStory = {
+  render: () => {
+    const [date, setDate] = useState(new Date());
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() - 7);
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 30);
+    
+    return (
+      <div className="w-[400px]">
+        <Calendar 
+          value={date} 
+          onChange={setDate}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+      </div>
+    );
+  },
+  name: 'With Min/Max Dates',
+};
+
+// DatePicker Stories
+const datePickerMeta: Meta<typeof DatePicker> = {
+  title: 'Components/Calendar/DatePicker',
+  component: DatePicker,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'Date picker with input field and calendar popup',
+      },
+    },
+  },
+  tags: ['autodocs'],
+};
+
+export const DatePickerStory = {
+  ...datePickerMeta,
+  render: () => {
+    const [date, setDate] = useState<Date>();
+    return (
+      <div className="w-[320px]">
+        <DatePicker 
+          value={date} 
+          onChange={setDate}
+          placeholder="Pick a date"
+        />
+      </div>
+    );
+  },
+  name: 'Default',
+};
+
+// DateRangePicker Stories
+const dateRangePickerMeta: Meta<typeof DateRangePicker> = {
+  title: 'Components/Calendar/DateRangePicker',
+  component: DateRangePicker,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'Select a range of dates',
+      },
+    },
+  },
+  tags: ['autodocs'],
+};
+
+export const DateRangePickerStory = {
+  ...dateRangePickerMeta,
+  render: () => {
+    const [range, setRange] = useState<{ start: Date; end: Date }>();
+    return (
+      <div className="w-[320px]">
+        <DateRangePicker 
+          value={range} 
+          onChange={setRange}
+          placeholder="Select date range"
+        />
+      </div>
+    );
+  },
+  name: 'Default',
+};
+
+// EventCalendar Stories
+const eventCalendarMeta: Meta<typeof EventCalendar> = {
+  title: 'Components/Calendar/EventCalendar',
+  component: EventCalendar,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'Full-featured calendar with events, drag-drop, and editing',
+      },
+    },
+  },
+  tags: ['autodocs'],
+};
 
 const defaultEvents: CalendarEvent[] = [
   {
@@ -47,27 +166,6 @@ const defaultEvents: CalendarEvent[] = [
     category: 'water',
     description: 'Pool fitness class',
   },
-  {
-    id: '5',
-    title: 'Rythmic',
-    start: new Date(2024, 3, 2, 16, 0),
-    end: new Date(2024, 3, 2, 17, 0),
-    category: 'music',
-  },
-  {
-    id: '6',
-    title: 'Zumba dance',
-    start: new Date(2024, 3, 20, 18, 0),
-    end: new Date(2024, 3, 20, 19, 0),
-    category: 'dance',
-  },
-  {
-    id: '7',
-    title: 'Water aerobic',
-    start: new Date(2024, 3, 27, 9, 0),
-    end: new Date(2024, 3, 27, 10, 0),
-    category: 'water',
-  },
 ];
 
 const categories = [
@@ -77,7 +175,8 @@ const categories = [
   { id: 'water', name: 'Water', color: '#eab308' },
 ];
 
-export const Default: Story = {
+export const EventCalendarDefault = {
+  ...eventCalendarMeta,
   render: () => {
     const [date, setDate] = useState(new Date(2024, 3, 1));
     const [events, setEvents] = useState(defaultEvents);
@@ -94,18 +193,18 @@ export const Default: Story = {
       </div>
     );
   },
+  name: 'Default',
 };
 
-export const EditableWithDragDrop: Story = {
+export const EventCalendarEditable = {
+  ...eventCalendarMeta,
   render: () => {
     const [date, setDate] = useState(new Date(2024, 3, 1));
     const [events, setEvents] = useState(defaultEvents);
 
     const handleDrop = (event: CalendarEvent, newDate: Date) => {
       const updatedEvents = events.map((e) =>
-        e.id === event.id
-          ? { ...e, start: newDate, end: newDate }
-          : e
+        e.id === event.id ? { ...e, start: newDate, end: newDate } : e
       );
       setEvents(updatedEvents);
     };
@@ -143,10 +242,11 @@ export const EditableWithDragDrop: Story = {
       </div>
     );
   },
-  name: 'Editable (Drag & Drop + Create/Edit/Delete)',
+  name: 'Editable (Drag & Drop)',
 };
 
-export const WeekView: Story = {
+export const EventCalendarWeekView = {
+  ...eventCalendarMeta,
   render: () => {
     const [date, setDate] = useState(new Date(2024, 3, 9));
     const [events, setEvents] = useState(defaultEvents);
@@ -168,68 +268,5 @@ export const WeekView: Story = {
       </div>
     );
   },
-};
-
-export const WithAllDayEvents: Story = {
-  render: () => {
-    const [date, setDate] = useState(new Date(2024, 3, 1));
-    const [events, setEvents] = useState<CalendarEvent[]>([
-      ...defaultEvents,
-      {
-        id: '8',
-        title: 'Holiday',
-        start: new Date(2024, 3, 5),
-        end: new Date(2024, 3, 5),
-        category: 'sport',
-        allDay: true,
-      },
-      {
-        id: '9',
-        title: 'Conference',
-        start: new Date(2024, 3, 15),
-        end: new Date(2024, 3, 15),
-        category: 'music',
-        allDay: true,
-        description: 'Full day conference',
-      },
-    ]);
-
-    return (
-      <div className="w-[800px]">
-        <EventCalendar
-          value={date}
-          onChange={setDate}
-          events={events}
-          categories={categories}
-          editable
-          showLegend
-        />
-      </div>
-    );
-  },
-};
-
-export const ManyEvents: Story = {
-  render: () => {
-    const [date, setDate] = useState(new Date(2024, 3, 1));
-    const manyEvents: CalendarEvent[] = Array.from({ length: 30 }, (_, i) => ({
-      id: i.toString(),
-      title: `Event ${i + 1}`,
-      start: new Date(2024, 3, (i % 10) + 1, 10 + (i % 5)),
-      end: new Date(2024, 3, (i % 10) + 1, 11 + (i % 5)),
-      category: categories[i % 4].id,
-    }));
-
-    return (
-      <div className="w-[800px]">
-        <EventCalendar
-          value={date}
-          onChange={setDate}
-          events={manyEvents}
-          categories={categories}
-          showLegend
-        />
-      </div>
-    );
-  },
+  name: 'Week View',
 };
