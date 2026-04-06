@@ -1,6 +1,6 @@
 {
   "name": "brownie-ui-calendar",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "A modern, accessible calendar component library for Brownie UI",
   "author": "Brownie UI Team",
   "license": "MIT",
@@ -41,14 +41,15 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external react,brownie-ui-core,date-fns",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react,brownie-ui-core,date-fns",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react,brownie-ui-core,date-fns,@radix-ui/react-tooltip",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react,brownie-ui-core,date-fns,@radix-ui/react-tooltip",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.2.8",
     "brownie-ui-core": "0.1.3",
     "date-fns": "^3.6.0"
   },

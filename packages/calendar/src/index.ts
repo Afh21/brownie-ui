@@ -1,14 +1,12 @@
-export { Calendar } from './calendar';
-export { DatePicker } from './date-picker';
-export { DateRangePicker } from './date-range-picker';
 export { EventCalendar } from './event-calendar';
+export { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from './tooltip';
 
 export type { 
-  CalendarProps, 
-  DatePickerProps, 
-  DateRangePickerProps, 
   EventCalendarProps,
   CalendarEvent,
   CalendarView,
-  EventCategory 
+  EventCategory,
+  Locale,
+  HourFormat,
+  CalendarSize 
 } from './types';

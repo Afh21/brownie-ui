@@ -1,16 +1,6 @@
 # brownie-ui-calendar
 
-A modern, accessible calendar component library for Brownie UI. Inspired by shadcn/ui with powerful features for date picking, event management, and scheduling.
-
-## Features
-
-- 📅 **Calendar** - Beautiful monthly calendar view with navigation
-- 📆 **DatePicker** - Single date selection with input
-- 📊 **DateRangePicker** - Select date ranges
-- 🎯 **EventCalendar** - Full event management with categories
-- 🎨 **Customizable** - Tailwind CSS styling
-- ♿ **Accessible** - Keyboard navigation and ARIA support
-- 📱 **Responsive** - Works on all screen sizes
+A modern, accessible calendar component for Brownie UI with full event management, drag & drop, and resizable events.
 
 ## Installation
 
@@ -18,76 +8,9 @@ A modern, accessible calendar component library for Brownie UI. Inspired by shad
 npm install brownie-ui-calendar
 # or
 pnpm add brownie-ui-calendar
-# or
-yarn add brownie-ui-calendar
 ```
 
-## Components
-
-### Calendar
-
-Basic calendar component for date display and selection.
-
-```tsx
-import { Calendar } from 'brownie-ui-calendar';
-
-function App() {
-  const [date, setDate] = useState(new Date());
-  
-  return (
-    <Calendar 
-      value={date} 
-      onChange={setDate} 
-      view="month"
-    />
-  );
-}
-```
-
-### DatePicker
-
-Date picker with input field and calendar popup.
-
-```tsx
-import { DatePicker } from 'brownie-ui-calendar';
-
-function App() {
-  const [date, setDate] = useState<Date>();
-  
-  return (
-    <DatePicker 
-      value={date}
-      onChange={setDate}
-      placeholder="Pick a date"
-      minDate={new Date()}
-    />
-  );
-}
-```
-
-### DateRangePicker
-
-Select a range of dates.
-
-```tsx
-import { DateRangePicker } from 'brownie-ui-calendar';
-
-function App() {
-  const [range, setRange] = useState<{ start: Date; end: Date }>();
-  
-  return (
-    <DateRangePicker 
-      value={range}
-      onChange={setRange}
-      placeholder="Select date range"
-    />
-  );
-}
-```
-
-### EventCalendar
-
-Full-featured calendar with events and categories.
+## Quick Start
 
 ```tsx
 import { EventCalendar } from 'brownie-ui-calendar';
@@ -100,34 +23,24 @@ const events = [
     end: new Date(2024, 3, 9, 15, 0),
     category: 'music',
   },
-  {
-    id: '2',
-    title: 'Kayaking',
-    start: new Date(2024, 3, 6, 10, 0),
-    end: new Date(2024, 3, 6, 12, 0),
-    category: 'sport',
-  },
 ];
 
 const categories = [
   { id: 'music', name: 'Music', color: '#3b82f6' },
   { id: 'sport', name: 'Sport', color: '#ec4899' },
-  { id: 'dance', name: 'Dance', color: '#8b5cf6' },
-  { id: 'water', name: 'Water', color: '#eab308' },
 ];
 
 function App() {
-  const [date, setDate] = useState(new Date());
-  
   return (
     <EventCalendar 
-      value={date}
-      onChange={setDate}
       events={events}
       categories={categories}
-      onEventClick={(event) => console.log('Clicked:', event)}
+      view="month"
+      locale="es"
       editable
-      showLegend
+      onEventClick={(event) => console.log('Clicked:', event)}
+      onEventDrop={(event, newDate) => console.log('Moved to:', newDate)}
+      onEventResize={(event, newEnd) => console.log('Resized to:', newEnd)}
     />
   );
 }
@@ -135,33 +48,58 @@ function App() {
 
 ## Props
 
-### Calendar
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `events` | `CalendarEvent[]` | `[]` | Array of events |
+| `categories` | `EventCategory[]` | Default colors | Event categories |
+| `view` | `'month' \| 'week' \| 'day'` | `'month'` | Current view |
+| `value` | `Date` | - | Controlled selected date |
+| `defaultDate` | `Date` | `new Date()` | Default selected date |
+| `onChange` | `(date: Date) => void` | - | Date change callback |
+| `onViewChange` | `(view: CalendarView) => void` | - | View change callback |
+| `onEventClick` | `(event: CalendarEvent) => void` | - | Event click handler |
+| `onEventDrop` | `(event, newDate) => void` | - | Drag & drop handler |
+| `onEventResize` | `(event, newEnd) => void` | - | Resize handler |
+| `onSlotClick` | `(date, hour?) => void` | - | Empty slot click handler |
+| `editable` | `boolean` | `false` | Enable drag & drop + resize |
+| `showLegend` | `boolean` | `false` | Show category legend |
+| `locale` | `'en' \| 'es'` | `'es'` | Language |
+| `hourFormat` | `'12h' \| '24h'` | `'24h'` | Time format |
+| `startHour` | `number` | `0` | First hour to display |
+| `endHour` | `number` | `24` | Last hour to display |
+| `renderEvent` | `function` | - | Custom event renderer |
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `value` | `Date` | Controlled selected date |
-| `defaultValue` | `Date` | Default selected date |
-| `onChange` | `(date: Date) => void` | Date change callback |
-| `view` | `'month' \| 'week'` | Calendar view mode |
-| `minDate` | `Date` | Minimum selectable date |
-| `maxDate` | `Date` | Maximum selectable date |
-| `disabledDates` | `Date[]` | Disabled specific dates |
+## Types
 
-### EventCalendar
+```tsx
+interface CalendarEvent {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  category?: string;
+  description?: string;
+  allDay?: boolean;
+}
 
-Additional props to Calendar:
+interface EventCategory {
+  id: string;
+  name: string;
+  color: string;
+}
+```
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `events` | `CalendarEvent[]` | Array of events |
-| `categories` | `EventCategory[]` | Event categories with colors |
-| `onEventClick` | `(event) => void` | Event click handler |
-| `onEventCreate` | `(event) => void` | Create event handler |
-| `onEventUpdate` | `(event) => void` | Update event handler |
-| `onEventDelete` | `(id) => void` | Delete event handler |
-| `onDrop` | `(event, date) => void` | Drag & drop handler |
-| `editable` | `boolean` | Enable edit mode |
-| `showLegend` | `boolean` | Show category legend |
+## Features
+
+- **3 Views**: Month, Week, Day
+- **Drag & Drop**: Move events between days/hours
+- **Resize**: Drag bottom border to extend duration
+- **Tooltips**: Hover events for details (shadcn/ui)
+- **i18n**: English & Spanish
+- **Past days**: Gray styling, disabled interaction
+- **Overlap handling**: Events auto-arrange horizontally
+- **Custom hour range**: Limit displayed hours (e.g., 6-18)
+- **Headless mode**: Custom `renderEvent` for full control
 
 ## License
 
