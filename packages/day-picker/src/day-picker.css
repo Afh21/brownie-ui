@@ -1,0 +1,69 @@
+/* Day Picker - Simple and clean */
+
+.day-picker {
+  width: 100%;
+  padding: 8px;
+}
+
+.day-picker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.day-picker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 60px;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.day-picker-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.day-picker-item.active {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.day-name {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.day-date {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .day-picker-item {
+    min-width: 48px;
+    padding: 8px 10px;
+  }
+  
+  .day-name {
+    font-size: 11px;
+  }
+  
+  .day-date {
+    font-size: 16px;
+  }
+}
